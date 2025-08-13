@@ -73,6 +73,10 @@ void ElaSuggestDelegate::paint(QPainter* painter, const QStyleOptionViewItem& op
 
 QSize ElaSuggestDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
+    if(option.text.isEmpty()) 
+    {
+        return QSize(100, 40);
+	}
     QSize size = QStyledItemDelegate::sizeHint(option, index);
     size.setHeight(40);
     return size;

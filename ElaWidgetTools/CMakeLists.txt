@@ -62,9 +62,6 @@ if (MSVC)
     set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
 endif ()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC
         Qt${QT_VERSION_MAJOR}::Widgets
@@ -76,6 +73,14 @@ else ()
         Qt${QT_VERSION_MAJOR}::Widgets
     )
 endif ()
+
+# 复制编译产物到 AutoFlowStation
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    # DLL / EXE
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:${PROJECT_NAME}>
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/../AutoFlowStation/
+)
 
 
 install(
