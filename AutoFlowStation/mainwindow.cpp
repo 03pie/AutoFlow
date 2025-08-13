@@ -41,13 +41,17 @@
 MainWindow::MainWindow(QWidget* parent)
     : ElaWindow(parent)
 {
-    initWindow();
+	// 开始窗口
+    initStartWindow();
+
+	//初始化窗口
+    //initWindow();
 
     //额外布局
-    initEdgeLayout();
+    //initEdgeLayout();
 
     //中心窗口
-    initContent();
+    //initContent();
 
     // 拦截默认关闭事件
     _closeDialog = new ElaContentDialog(this);
@@ -78,6 +82,48 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
     delete this->_aboutPage;
+}
+
+void MainWindow::initStartWindow()
+{
+    setWindowButtonFlags(ElaAppBarType::CloseButtonHint);
+    setWindowIcon(QIcon(":/include/Image/Cirno.jpg"));
+    setWindowTitle(QString{"欢迎"});
+    resize(1200, 740);
+    eTheme->setThemeMode(ElaThemeType::Dark);
+    setIsNavigationBarEnable(false);
+    
+    ElaText* centralStack = new ElaText("AutoFlowStation全新一代工业控制软件!", this);
+    QFont font = centralStack->font();
+    font.setPixelSize(32);
+    centralStack->setFont(font);
+    centralStack->setAlignment(Qt::AlignCenter);
+    addCentralWidget(centralStack);
+
+    setCurrentStackIndex(1);
+    //// 自定义AppBar菜单
+    //ElaMenu* appBarMenu = new ElaMenu(this);
+    //appBarMenu->setMenuItemHeight(27);
+    //connect(appBarMenu->addAction("跳转到一级主要堆栈"), &QAction::triggered, this, [=]() {
+    //    setCurrentStackIndex(0);
+    //    });
+    //connect(appBarMenu->addAction("跳转到二级主要堆栈"), &QAction::triggered, this, [=]() {
+    //    setCurrentStackIndex(1);
+    //    });
+    //connect(appBarMenu->addAction("更改页面切换特效(Scale)"), &QAction::triggered, this, [=]() {
+    //    setStackSwitchMode(ElaWindowType::StackSwitchMode::Scale);
+    //    });
+    //connect(appBarMenu->addElaIconAction(ElaIconType::GearComplex, "自定义主窗口设置"), &QAction::triggered, this, [=]() {
+    //    navigation(_settingKey);
+    //    });
+    //appBarMenu->addSeparator();
+    //connect(appBarMenu->addElaIconAction(ElaIconType::MoonStars, "更改项目主题"), &QAction::triggered, this, [=]() {
+    //    eTheme->setThemeMode(eTheme->getThemeMode() == ElaThemeType::Light ? ElaThemeType::Dark : ElaThemeType::Light);
+    //    });
+    //connect(appBarMenu->addAction("使用原生菜单"), &QAction::triggered, this, [=]() {
+    //    setCustomMenu(nullptr);
+    //    });
+    //setCustomMenu(appBarMenu);
 }
 
 void MainWindow::initWindow()

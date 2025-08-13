@@ -27,6 +27,7 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
+    void initStartWindow();
     void initWindow();
     void initEdgeLayout();
     void initContent();
