@@ -42,16 +42,16 @@ MainWindow::MainWindow(QWidget* parent)
     : ElaWindow(parent)
 {
 	// 开始窗口
-    initStartWindow();
+    //initStartWindow();
 
 	//初始化窗口
-    //initWindow();
+    initWindow();
 
     //额外布局
-    //initEdgeLayout();
+    initEdgeLayout();
 
     //中心窗口
-    //initContent();
+    initContent();
 
     // 拦截默认关闭事件
     _closeDialog = new ElaContentDialog(this);
@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget* parent)
     });
 
     //移动到中心
-    //moveToCenter();
+    moveToCenter();
 
     //  如果你的windows版本低于Win11 调用原生Mica、Mica-Alt、Acrylic 会导致窗口绘制失效  Dwm_Blur仍可使用
     //    eTheme->setThemeMode(ElaThemeType::Dark);
@@ -86,21 +86,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::initStartWindow()
 {
-    setWindowButtonFlags(ElaAppBarType::CloseButtonHint);
-    setWindowIcon(QIcon(":/include/Image/Cirno.jpg"));
+    // 设置中心空间为透明
+    setIsCentralStackedWidgetTransparent(true);
+    // 设置窗口显示图标与标题
+    setWindowIcon(QIcon(":/Resource/Image/Icon.png"));
     setWindowTitle(QString{"欢迎"});
-    resize(1200, 740);
+    // 设置主题
     eTheme->setThemeMode(ElaThemeType::Dark);
+    // 设置 
     setIsNavigationBarEnable(false);
-    
-    ElaText* centralStack = new ElaText("AutoFlowStation全新一代工业控制软件!", this);
+
+    getCentralWidget(getCurrentNavigationIndex());
+    ElaText* centralStack = new ElaText("AutoFlowStation全新一代工业控制软件!");
     QFont font = centralStack->font();
     font.setPixelSize(32);
     centralStack->setFont(font);
     centralStack->setAlignment(Qt::AlignCenter);
     addCentralWidget(centralStack);
 
-    setCurrentStackIndex(1);
+    auto aa = getCurrentStackIndex();
+  /*  ElaText* centralStack = new ElaText("AutoFlowStation全新一代工业控制软件!", this);
+    QFont font = centralStack->font();
+    font.setPixelSize(32);
+    centralStack->setFont(font);
+    centralStack->setAlignment(Qt::AlignCenter);
+    addCentralWidget(centralStack);
+
+    setCurrentStackIndex(1);*/
     //// 自定义AppBar菜单
     //ElaMenu* appBarMenu = new ElaMenu(this);
     //appBarMenu->setMenuItemHeight(27);
@@ -129,8 +141,8 @@ void MainWindow::initStartWindow()
 void MainWindow::initWindow()
 {
     // setIsCentralStackedWidgetTransparent(true);
-    setWindowIcon(QIcon(":/include/Image/Cirno.jpg"));
-    resize(1200, 740);
+    setWindowIcon(QIcon(":/Resource/Image/Icon.png"));
+    resize(1200, 740); 
     // ElaLog::getInstance()->initMessageLog(true);
      eTheme->setThemeMode(ElaThemeType::Dark);
      //setIsNavigationBarEnable(false);
