@@ -4,6 +4,9 @@
 #include "ElaWindow.h"
 
 #include <QMainWindow>
+
+class T_StartPage;
+
 class T_Home;
 class T_Icon;
 class T_ElaScreen;
@@ -36,8 +39,19 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
+
+    T_StartPage* _startPage{ nullptr };
+
+
+
+
+
+
+
+
     ElaContentDialog* _closeDialog{nullptr};
     T_Home* _homePage{nullptr};
+
 #ifdef Q_OS_WIN
     T_ElaScreen* _elaScreenPage{nullptr};
 #endif

@@ -16,10 +16,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 FILE(GLOB ORIGIN *.cpp *.h)
 FILE(GLOB MODELVIEW ModelView/*.h ModelView/*.cpp)
-FILE(GLOB EAXMPLEPAGE ExamplePage/*.h ExamplePage/*.cpp)
+FILE(GLOB EAXMPLEPAGE AutoFlowStationPage/*.h AutoFlowStationPage/*.cpp)
 
 source_group(ModelView FILES ${MODELVIEW})
-source_group(ExamplePage FILES ${EAXMPLEPAGE})
+source_group(AutoThinkStationPage FILES ${EAXMPLEPAGE})
 
 
 set(PROJECT_SOURCES
@@ -56,7 +56,7 @@ endif ()
 
 if (WIN32)
     target_include_directories(${PROJECT_NAME} PUBLIC
-        ExamplePage
+        AutoFlowStationPage
         ModelView
     )
     if (BUILD_ELAPACKETIO)
@@ -74,7 +74,7 @@ if (WIN32)
 
 else ()
     target_include_directories(${PROJECT_NAME} PUBLIC
-        ExamplePage
+        AutoFlowStationPage
         ModelView
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE
