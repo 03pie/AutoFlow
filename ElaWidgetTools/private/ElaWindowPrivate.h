@@ -14,6 +14,7 @@ class ElaAppBar;
 class ElaCentralStackedWidget;
 class QHBoxLayout;
 class QVBoxLayout;
+class QSplitter;
 class ElaThemeAnimationWidget;
 class ElaWindowPrivate : public QObject
 {
@@ -48,6 +49,7 @@ private:
     ElaCentralStackedWidget* _navigationCenterStackedWidget{nullptr};
     ElaAppBar* _appBar{nullptr};
     QHBoxLayout* _centerLayout{nullptr};
+    QSplitter* _navigationCenterStackedWidgetSplitter{ nullptr };
     int _contentsMargins{5};
     bool _isNavigationDisplayModeChanged{false};
     bool _isNavigationEnable{true};

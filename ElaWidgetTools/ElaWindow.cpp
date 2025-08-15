@@ -13,6 +13,7 @@
 #include "private/ElaWindowPrivate.h"
 #include <QApplication>
 #include <QDockWidget>
+#include <QSplitter>
 #include <QHBoxLayout>
 #include <QPropertyAnimation>
 #include <QResizeEvent>
@@ -75,7 +76,13 @@ ElaWindow::ElaWindow(QWidget* parent)
     d->_centerLayout = new QHBoxLayout(navigationCentralWidget);
     d->_centerLayout->setSpacing(0);
     d->_centerLayout->addWidget(d->_navigationBar);
-    d->_centerLayout->addWidget(d->_navigationCenterStackedWidget);
+
+    d->_navigationCenterStackedWidgetSplitter = new QSplitter(Qt::Vertical, this); // 上下分割
+    d->_navigationCenterStackedWidgetSplitter->addWidget(d->_navigationCenterStackedWidget);
+    // d->_navigationCenterStackedWidgetSplitter->addWidget(new QTextEdit("信息栏"));
+    // d->_navigationCenterStackedWidgetSplitter->setSizes({ 600, 100 }); // 初始比例
+
+    d->_centerLayout->addWidget(d->_navigationCenterStackedWidgetSplitter);
     d->_centerLayout->setContentsMargins(d->_contentsMargins, 0, 0, 0);
 
     // 事件总线
