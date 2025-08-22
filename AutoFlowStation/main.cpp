@@ -2,7 +2,7 @@
 #include <QScreen>
 
 #include "ElaApplication.h"
-#include "MainWindow.h"
+#include "mainwindow.h"
 #ifdef Q_OS_WIN
 #include <Windows.h>
 #endif
