@@ -4,11 +4,12 @@
 #include "ElaLog.h"
 #include "ElaTheme.h"
 #include "ElaContentDialog.h"
+#include "PluginFramework.h"
 
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QMouseEvent>
-
+ 
 
 MainWindow::MainWindow(QWidget* parent)
     : ElaWindow(parent),
