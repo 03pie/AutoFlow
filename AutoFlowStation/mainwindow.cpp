@@ -4,7 +4,7 @@
 #include "ElaLog.h"
 #include "ElaTheme.h"
 #include "ElaContentDialog.h"
-#include "PluginFramework.h"
+#include "PluginManager.h"
 
 #include <QDebug>
 #include <QHBoxLayout>

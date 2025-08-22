@@ -63,7 +63,7 @@ if (WIN32)
         target_link_libraries(${PROJECT_NAME} PRIVATE
             Qt${QT_VERSION_MAJOR}::Widgets
             ElaWidgetTools
-            PluginFramework
+            GeneralUtils
         )
     endif ()
 
@@ -75,7 +75,7 @@ else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE
         Qt${QT_VERSION_MAJOR}::Widgets
         ElaWidgetTools
-        PluginFramework
+        GeneralUtils
     )
 endif ()
 
