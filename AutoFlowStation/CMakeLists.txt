@@ -15,17 +15,11 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 FILE(GLOB ORIGIN *.cpp *.h)
-FILE(GLOB MODELVIEW ModelView/*.h ModelView/*.cpp)
-FILE(GLOB EAXMPLEPAGE AutoFlowStationPage/*.h AutoFlowStationPage/*.cpp)
 
-source_group(ModelView FILES ${MODELVIEW})
-source_group(AutoThinkStationPage FILES ${EAXMPLEPAGE})
 source_group(source FILES ${ORIGIN})
 
 set(PROJECT_SOURCES
     ${ORIGIN}
-    ${MODELVIEW}
-    ${EAXMPLEPAGE}
 )
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -55,10 +49,6 @@ else ()
 endif ()
 
 if (WIN32)
-    target_include_directories(${PROJECT_NAME} PUBLIC
-        AutoFlowStationPage
-        ModelView
-    )
     if (BUILD_ELAPACKETIO)
         target_link_libraries(${PROJECT_NAME} PRIVATE
             Qt${QT_VERSION_MAJOR}::Widgets

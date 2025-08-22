@@ -5,9 +5,6 @@
 #include "ElaTheme.h"
 #include "ElaContentDialog.h"
 
-#include "T_StartPage.h"
-#include "T_BaseComponents.h"
-
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QMouseEvent>
@@ -89,8 +86,6 @@ void MainWindow::initEdgeLayout()
 
 void MainWindow::initContent()
 {
-    _startPage = new T_StartPage(this);
-    addPageNode(QString{ "hhh" }, _startPage, ElaIconType::Hotel);
     qDebug() << "已注册的事件列表" << ElaEventBus::getInstance()->getRegisteredEventsName();
 }
 

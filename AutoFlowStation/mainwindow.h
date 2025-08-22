@@ -5,7 +5,6 @@
 
 #include <QMainWindow>
 
-class T_StartPage;
 class ElaContentDialog;
 
 class MainWindow : public ElaWindow
@@ -25,7 +24,6 @@ protected:
 
 private:
 
-    T_StartPage* _startPage{ nullptr };        // 启动页
     ElaContentDialog* _closeDialog{ nullptr }; // 自定义关闭对话框
 };
 #endif // MAINWINDOW_H
