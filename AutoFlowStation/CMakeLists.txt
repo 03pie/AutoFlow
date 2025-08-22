@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+﻿cmake_minimum_required(VERSION 3.16)
 
 project(AutoFlowStation VERSION 0.1 LANGUAGES CXX)
 
@@ -18,8 +18,8 @@ FILE(GLOB INCLUDE *.h)
 FILE(GLOB SOURCE  *.cpp)
 
 # 分组显示（VS友好）
-source_group(include FILES ${INCLUDE})
-source_group(source FILES  ${SOURCE})
+source_group(01_Include FILES ${INCLUDE})
+source_group(02_Source FILES  ${SOURCE})
 
 set(PROJECT_SOURCES
     ${INCLUDE}

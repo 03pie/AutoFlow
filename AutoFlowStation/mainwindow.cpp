@@ -5,6 +5,7 @@
 #include "ElaTheme.h"
 #include "ElaContentDialog.h"
 #include "PluginManager.h"
+#include "Logger.h"
 
 #include <QDebug>
 #include <QHBoxLayout>
@@ -82,7 +83,7 @@ void MainWindow::initWindow()
 
 void MainWindow::initEdgeLayout()
 {
-    
+
 }
 
 void MainWindow::initContent()
