@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 
-project(AutoThinkStation VERSION 0.1 LANGUAGES CXX)
+project(AutoFlowStation VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -20,7 +20,7 @@ FILE(GLOB EAXMPLEPAGE AutoFlowStationPage/*.h AutoFlowStationPage/*.cpp)
 
 source_group(ModelView FILES ${MODELVIEW})
 source_group(AutoThinkStationPage FILES ${EAXMPLEPAGE})
-
+source_group(source FILES ${ORIGIN})
 
 set(PROJECT_SOURCES
     ${ORIGIN}
@@ -40,7 +40,7 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         list(APPEND resource_files ${filename})
     endforeach (filepath)
 
-    qt_add_resources(${PROJECT_NAME} "AutoThinkStation"
+    qt_add_resources(${PROJECT_NAME} "AutoFlowStation"
         RESOURCES PREFIX "/"
         FILES
         ${resource_files}
@@ -69,6 +69,7 @@ if (WIN32)
         target_link_libraries(${PROJECT_NAME} PRIVATE
             Qt${QT_VERSION_MAJOR}::Widgets
             ElaWidgetTools
+            PluginFramework
         )
     endif ()
 
@@ -80,6 +81,7 @@ else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE
         Qt${QT_VERSION_MAJOR}::Widgets
         ElaWidgetTools
+        PluginFramework
     )
 endif ()
 

@@ -26,6 +26,7 @@ if (WIN32 AND BUILD_ELAPACKETIO)
     add_subdirectory(ElaPacketIO)
 endif ()
 # add_subdirectory(ElaWidgetToolsExample)
+add_subdirectory(PluginFramework)
 add_subdirectory(AutoFlowStation)
 
 if (${QT_VERSION} VERSION_LESS 6.1.0)

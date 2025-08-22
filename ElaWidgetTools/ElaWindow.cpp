@@ -23,6 +23,8 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QVBoxLayout>
+
+#include <QTextEdit>
 Q_PROPERTY_CREATE_Q_CPP(ElaWindow, int, ThemeChangeTime)
 Q_PROPERTY_CREATE_Q_CPP(ElaWindow, ElaNavigationType::NavigationDisplayMode, NavigationBarDisplayMode)
 Q_PROPERTY_CREATE_Q_CPP(ElaWindow, ElaWindowType::StackSwitchMode, StackSwitchMode)
@@ -79,8 +81,8 @@ ElaWindow::ElaWindow(QWidget* parent)
 
     d->_navigationCenterStackedWidgetSplitter = new QSplitter(Qt::Vertical, this); // 上下分割
     d->_navigationCenterStackedWidgetSplitter->addWidget(d->_navigationCenterStackedWidget);
-    // d->_navigationCenterStackedWidgetSplitter->addWidget(new QTextEdit("信息栏"));
-    // d->_navigationCenterStackedWidgetSplitter->setSizes({ 600, 100 }); // 初始比例
+    d->_navigationCenterStackedWidgetSplitter->addWidget(new QTextEdit("信息栏"));
+    d->_navigationCenterStackedWidgetSplitter->setSizes({ 600, 100 }); // 初始比例
 
     d->_centerLayout->addWidget(d->_navigationCenterStackedWidgetSplitter);
     d->_centerLayout->setContentsMargins(d->_contentsMargins, 0, 0, 0);
