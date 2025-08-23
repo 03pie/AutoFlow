@@ -1,21 +1,20 @@
-/******************************************************************************
- * ÎÄ¼şÃû    : Logger.h
- * ÏîÄ¿      : AutoFlow
- * ¹¦ÄÜ      : ÈÕÖ¾ÏµÍ³Í·ÎÄ¼ş
- * ×÷Õß      : 03pei
- * ÈÕÆÚ      : 2025-08-22
- * °æ±¾      : 1.0
- * ËµÃ÷      :
- *      1. GetInstance()         »ñÈ¡ Logger ÊµÀı
- *      2. SetPrefix()           ÉèÖÃÈÕÖ¾Ç°×º
- *      3. SetLogLevel()         ÉèÖÃÈÕÖ¾µÈ¼¶
- *      4. SetLogFile()          ÉèÖÃÈÕÖ¾ÎÄ¼ş
- *      5. EnableConsoleOutput() ÆôÓÃ¿ØÖÆÌ¨Êä³ö
- *      6. SetMaxFileSize()      ÉèÖÃ×î´óÎÄ¼ş´óĞ¡
- *      7. SetMaxBackupFiles()   ÉèÖÃ×î´ó±¸·İÎÄ¼şÊı
- *      8. Log()                 ¼ÇÂ¼ÈÕÖ¾
- * ÒÀÀµ      :
- *      - GeneralDefine.h
+ï»¿/******************************************************************************
+    * @File     : Logger.h
+    * @Brief    : Logger class header file
+    * @Author   : 03pei
+    * @Date     : 2025-08-22
+    * @Version  : 1.0
+    * @Note     :
+    *      1. GetInstance()         Get Logger instance
+    *      2. SetPrefix()           Set log prefix
+    *      3. SetLogLevel()         Set log level
+    *      4. SetLogFile()          Set log file
+    *      5. EnableConsoleOutput() Enable console output
+    *      6. SetMaxFileSize()      Set max log file size
+    *      7. SetMaxBackupFiles()   Set max backup files
+    *      8. Log()                 Log message
+    * @Include  :
+    *      - GeneralDefine.h
  ******************************************************************************/
 #pragma once
 #include "GeneralDefine.h"
@@ -29,7 +28,7 @@
 #include <filesystem>
 
  /*****************************************************
-  * @brief ÈÕÖ¾µÈ¼¶
+  * @brief æ—¥å¿—çº§åˆ«
   *****************************************************/
 enum class LogLevel
 {
@@ -39,14 +38,14 @@ enum class LogLevel
 };
 
 /*****************************************************
- * @brief ÈÕÖ¾Àà
+ * @brief æ—¥å¿—ç±»
  *****************************************************/
 class Logger
 {
 public:
     /*****************************************************
-     * @brief »ñÈ¡ Logger ÊµÀı
-     * @return Logger& ·µ»Ø Logger ÊµÀıµÄÒıÓÃ
+     * @brief è·å– Logger å®ä¾‹
+     * @return Logger& è¿”å› Logger å®ä¾‹çš„å¼•ç”¨
      *****************************************************/
     static Logger& GetInstance()
     {
@@ -54,7 +53,7 @@ public:
         return instance;
     }
     /*****************************************************
-     * @brief Logger Îö¹¹º¯Êı
+     * @brief Logger ææ„å‡½æ•°
      *****************************************************/
     ~Logger()
     {
@@ -62,18 +61,18 @@ public:
             file_stream_.close();
     }
     /*****************************************************
-     * @brief ÉèÖÃÈÕÖ¾Ç°×º
-     * @param prefix ÈÕÖ¾Ç°×º×Ö·û´®
+     * @brief è®¾ç½®æ—¥å¿—å‰ç¼€
+     * @param prefix æ—¥å¿—å‰ç¼€å­—ç¬¦ä¸²
      *****************************************************/
     void SetPrefix(const std::string& prefix) { prefix_ = prefix; UpdateMaxPrefixWidth(prefix_); }
     /*****************************************************
-     * @brief ÉèÖÃÈÕÖ¾µÈ¼¶
-     * @param level ÈÕÖ¾µÈ¼¶
+     * @brief è®¾ç½®æ—¥å¿—çº§åˆ«
+     * @param level æ—¥å¿—çº§åˆ«
      *****************************************************/
     void SetLogLevel(LogLevel level) { min_level_ = level; }
     /*****************************************************
-     * @brief ÉèÖÃÈÕÖ¾ÎÄ¼ş
-     * @param file_path ÈÕÖ¾ÎÄ¼şÂ·¾¶
+     * @brief è®¾ç½®æ—¥å¿—æ–‡ä»¶
+     * @param file_path æ—¥å¿—æ–‡ä»¶è·¯å¾„
      *****************************************************/
     void SetLogFile(const std::string& file_path)
     {
@@ -81,27 +80,27 @@ public:
         OpenLogFile();
     }
     /*****************************************************
-     * @brief ÆôÓÃ¿ØÖÆÌ¨Êä³ö
-     * @param enable ÊÇ·ñÆôÓÃ¿ØÖÆÌ¨Êä³ö
+     * @brief å¯ç”¨/ç¦ç”¨æ§åˆ¶å°è¾“å‡º
+     * @param enable æ˜¯å¦å¯ç”¨æ§åˆ¶å°è¾“å‡º
      *****************************************************/
     void EnableConsoleOutput(bool enable) { console_output_ = enable; }
     /*****************************************************
-     * @brief ÉèÖÃ×î´óÎÄ¼ş´óĞ¡
-     * @param bytes ×î´óÎÄ¼ş´óĞ¡£¨×Ö½Ú£©
+     * @brief è®¾ç½®æœ€å¤§æ—¥å¿—æ–‡ä»¶å¤§å°
+     * @param bytes æœ€å¤§æ—¥å¿—æ–‡ä»¶å¤§å°ï¼ˆå­—èŠ‚ï¼‰
      *****************************************************/
     void SetMaxFileSize(size_t bytes) { max_file_size_ = bytes; }
     /*****************************************************
-     * @brief ÉèÖÃ×î´ó±¸·İÎÄ¼şÊı
-     * @param n ×î´ó±¸·İÎÄ¼şÊı
+     * @brief è®¾ç½®æœ€å¤§å¤‡ä»½æ–‡ä»¶æ•°
+     * @param n æœ€å¤§å¤‡ä»½æ–‡ä»¶æ•°
      *****************************************************/
     void SetMaxBackupFiles(int n) { max_backup_files_ = n; }
     /*****************************************************
-     * @brief ¼ÇÂ¼ÈÕÖ¾
-     * @param level ÈÕÖ¾µÈ¼¶
-     * @param message ÈÕÖ¾ÏûÏ¢
-     * @param file Ô´ÎÄ¼şÃû
-     * @param line ĞĞºÅ
-     * @param func º¯ÊıÃû
+     * @brief è®°å½•æ—¥å¿—
+     * @param level æ—¥å¿—çº§åˆ«
+     * @param message æ—¥å¿—ä¿¡æ¯
+     * @param file æºæ–‡ä»¶
+     * @param line è¡Œå·
+     * @param func å‡½æ•°å
      *****************************************************/
     void Log(LogLevel level, const std::string& message,
         const char* file = "", int line = 0,
@@ -121,10 +120,10 @@ public:
 
         std::ostringstream oss;
         oss << std::left
-            << std::setw(20) << GetCurrentTime()                 // Ê±¼ä×ó¶ÔÆë
-            << std::setw(12) << LogLevelToString(level)          // µÈ¼¶¹Ì¶¨¿í
-            << std::setw(max_file_width_) << file_func_line      // ÎÄ¼ş:ĞĞ:º¯Êı¿í¶È×ÔÊÊÓ¦
-            << std::setw(max_prefix_width_) << prefix_           // Ç°×º¿í¶È×ÔÊÊÓ¦
+            << std::setw(20) << GetCurrentTime()                 // æ—¶é—´æˆ³
+            << std::setw(12) << LogLevelToString(level)          // æ—¥å¿—çº§åˆ«
+            << std::setw(max_file_width_) << file_func_line      // æ–‡ä»¶:è¡Œ:å‡½æ•°å
+            << std::setw(max_prefix_width_) << prefix_           // å‰ç¼€
             << message;
 
         if (console_output_)
@@ -132,14 +131,14 @@ public:
 
         if (file_stream_.is_open())
         {
-            RotateLogIfNeeded(); // ¼ì²é´óĞ¡²¢¹ö¶¯ÈÕÖ¾
+            RotateLogIfNeeded(); // è½®è½¬æ—¥å¿—æ–‡ä»¶
             file_stream_ << oss.str() << std::endl;
         }
     }
 
 private:
     /*****************************************************
-     * @brief Logger ¹¹Ôìº¯Êı
+     * @brief Logger æ„é€ å‡½æ•°
      *****************************************************/
     Logger()
         : log_file_(GeneralDefine::general_logs_path),
@@ -148,33 +147,33 @@ private:
         console_output_(true),
         max_file_width_(0),
         max_prefix_width_(0),
-        max_file_size_(10 * 1024 * 1024), // Ä¬ÈÏ10MB
+        max_file_size_(10 * 1024 * 1024), // Ä¬ï¿½ï¿½10MB
         max_backup_files_(5)
     {
         OpenLogFile();
     }
     /*****************************************************
-     * @brief ½ûÓÃ¿½±´¹¹ÔìºÍ¸³Öµ²Ù×÷
+     * @brief å¤åˆ¶æ„é€ å‡½æ•°
      *****************************************************/
     Logger(const Logger&) = delete;
     /*****************************************************
-     * @brief ½ûÓÃÒÆ¶¯¹¹ÔìºÍ¸³Öµ²Ù×÷
+     * @brief ç§»åŠ¨æ„é€ å‡½æ•°
      *****************************************************/
     Logger(Logger&&) = delete;
     /*****************************************************
-     * @brief ½ûÓÃ¿½±´¸³Öµ²Ù×÷
+     * @brief èµ‹å€¼æ„é€ å‡½æ•°
      *****************************************************/
     Logger& operator=(const Logger&) = delete;
     /*****************************************************
-     * @brief ½ûÓÃÒÆ¶¯¸³Öµ²Ù×÷
+     * @brief èµ‹å€¼è¿ç®—ç¬¦
      *****************************************************/
     Logger& operator=(Logger&&) = delete;
     /*****************************************************
-     * @brief ´ò¿ªÈÕÖ¾ÎÄ¼ş
+     * @brief å…³é—­æ—¥å¿—æ–‡ä»¶
      *****************************************************/
     void OpenLogFile()
     {
-        // Èç¹ûÎÄ¼ş¼Ğ²»´æÔÚ£¬ÏÈ´´½¨
+        // åˆ›å»ºæ—¥å¿—æ–‡ä»¶æ‰€åœ¨ç›®å½•
         std::filesystem::path log_path(log_file_);
         std::filesystem::path dir = log_path.parent_path();
         if (!dir.empty() && !std::filesystem::exists(dir))
@@ -194,7 +193,7 @@ private:
     }
 
     /*****************************************************
-     * @brief ¼ì²é²¢ÂÖ×ªÈÕÖ¾ÎÄ¼ş
+     * @brief è½®è½¬æ—¥å¿—æ–‡ä»¶
      *****************************************************/
     void RotateLogIfNeeded()
     {
@@ -203,7 +202,7 @@ private:
         if (size < max_file_size_) return;
 
         file_stream_.close();
-        // ±¸·İ¾ÉÈÕÖ¾
+        // å¤‡ä»½æ—¥å¿—æ–‡ä»¶
         for (int i = max_backup_files_ - 1; i >= 1; --i)
         {
             std::string old_name = log_file_ + "." + std::to_string(i);
@@ -216,8 +215,8 @@ private:
         OpenLogFile();
     }
     /*****************************************************
-     * @brief »ñÈ¡µ±Ç°Ê±¼ä
-     * @return µ±Ç°Ê±¼ä×Ö·û´®
+     * @brief è·å–å½“å‰æ—¶é—´
+     * @return å½“å‰æ—¶é—´å­—ç¬¦ä¸²
      *****************************************************/
     std::string GetCurrentTime()
     {
@@ -235,9 +234,9 @@ private:
     }
 
     /*****************************************************
-     * @brief ½«ÈÕÖ¾¼¶±ğ×ª»»Îª×Ö·û´®
-     * @param level ÈÕÖ¾¼¶±ğ
-     * @return ÈÕÖ¾¼¶±ğ×Ö·û´®
+     * @brief æ—¥å¿—çº§åˆ«è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+     * @param level æ—¥å¿—çº§åˆ«
+     * @return æ—¥å¿—çº§åˆ«å­—ç¬¦ä¸²
      *****************************************************/
     std::string LogLevelToString(LogLevel level)
     {
@@ -251,48 +250,48 @@ private:
     }
 
     /*****************************************************
-     * @brief ¸üĞÂ×î´óÎÄ¼ş¿í¶È
-     * @param s ÈÕÖ¾ÏûÏ¢
+     * @brief æ›´æ–°æ—¥å¿—æ–‡ä»¶å®½åº¦
+     * @param s æ—¥å¿—ä¿¡æ¯
      *****************************************************/
     void UpdateMaxFileWidth(const std::string& s)
     {
         size_t len = s.length();
         if (len > max_file_width_)
-            max_file_width_ = static_cast<int>(len) + 2; // +2 ¿Õ¸ñ
+            max_file_width_ = static_cast<int>(len) + 2; // +2 for brackets
     }
 
     /*****************************************************
-     * @brief ¸üĞÂ×î´óÇ°×º¿í¶È
-     * @param s ÈÕÖ¾ÏûÏ¢
+     * @brief æ›´æ–°æ—¥å¿—å‰ç¼€å®½åº¦
+     * @param s æ—¥å¿—ä¿¡æ¯
      *****************************************************/
     void UpdateMaxPrefixWidth(const std::string& s)
     {
         size_t len = s.length();
         if (len > max_prefix_width_)
-            max_prefix_width_ = static_cast<int>(len) + 2; // +2 ¿Õ¸ñ
+            max_prefix_width_ = static_cast<int>(len) + 2; // +2 for brackets
     }
 
 private:
-    std::ofstream file_stream_{};              // ÈÕÖ¾ÎÄ¼şÁ÷
-    std::string log_file_{};                   // ÈÕÖ¾ÎÄ¼şÃû
-    std::string prefix_{};                     // ÈÕÖ¾Ç°×º
-    LogLevel min_level_{ LogLevel::INFO_LOG };   // ×îĞ¡ÈÕÖ¾¼¶±ğ
-    bool console_output_{ true };                // ÊÇ·ñÊä³öµ½¿ØÖÆÌ¨
-    int max_file_width_{ 0 };                    // ×î´óÎÄ¼ş¿í¶È
-    int max_prefix_width_{ 0 };                  // ×î´óÇ°×º¿í¶È
-    size_t max_file_size_{ 0 };                  // ×î´óÎÄ¼ş´óĞ¡
-    int max_backup_files_{ 0 };                  // ×î´ó±¸·İÎÄ¼şÊı
+    std::ofstream file_stream_{};              // æ—¥å¿—æ–‡ä»¶æµ
+    std::string log_file_{};                   // æ—¥å¿—æ–‡ä»¶å
+    std::string prefix_{};                     // æ—¥å¿—å‰ç¼€
+    LogLevel min_level_{ LogLevel::INFO_LOG };   // æœ€å°æ—¥å¿—çº§åˆ«
+    bool console_output_{ true };                // æ˜¯å¦è¾“å‡ºåˆ°æ§åˆ¶å°
+    int max_file_width_{ 0 };                    // æ—¥å¿—æ–‡ä»¶å®½åº¦
+    int max_prefix_width_{ 0 };                  // æ—¥å¿—å‰ç¼€å®½åº¦
+    size_t max_file_size_{ 0 };                  // æ—¥å¿—æ–‡ä»¶å¤§å°
+    int max_backup_files_{ 0 };                  // å¤‡ä»½æ—¥å¿—æ–‡ä»¶æ•°é‡
 };
 
 /*****************************************************
- * @brief ĞÅÏ¢ÈÕÖ¾ºê
+ * @brief ä¿¡æ¯æ—¥å¿—
  *****************************************************/
 #define LOG_INFO(msg) Logger::GetInstance().Log(LogLevel::INFO_LOG, msg, __FILE__, __LINE__, __FUNCTION__)
  /*****************************************************
-  * @brief ¾¯¸æÈÕÖ¾ºê
+  * @brief è­¦å‘Šæ—¥å¿—
   *****************************************************/
 #define LOG_WARN(msg) Logger::GetInstance().Log(LogLevel::WARNING_LOG, msg, __FILE__, __LINE__, __FUNCTION__)
-  /*****************************************************
-   * @brief ´íÎóÈÕÖ¾ºê
-   *****************************************************/
+/*****************************************************
+ * @brief é”™è¯¯æ—¥å¿—
+ *****************************************************/
 #define LOG_ERROR(msg) Logger::GetInstance().Log(LogLevel::ERROR_LOG, msg, __FILE__, __LINE__, __FUNCTION__)

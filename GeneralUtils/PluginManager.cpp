@@ -1,4 +1,4 @@
-#include "PluginManager.h"
+﻿#include "PluginManager.h"
 
 #include <vector>
 #include <stdexcept>
