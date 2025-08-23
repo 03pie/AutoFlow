@@ -38,7 +38,8 @@ struct PluginInformation {
 	DestroyPluginFunction destroy_function_{};
 };
 
-class PLUGINFRAMEWORK_API PluginManager {
+class PLUGINFRAMEWORK_API PluginManager 
+{
 public:
 	PluginManager();
 	~PluginManager();

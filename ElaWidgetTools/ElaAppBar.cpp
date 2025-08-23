@@ -36,7 +36,7 @@ ElaAppBar::ElaAppBar(QWidget* parent)
     Q_D(ElaAppBar);
     d->_buttonFlags = ElaAppBarType::RouteBackButtonHint | ElaAppBarType::StayTopButtonHint | ElaAppBarType::ThemeChangeButtonHint | ElaAppBarType::MinimizeButtonHint | ElaAppBarType::MaximizeButtonHint | ElaAppBarType::CloseButtonHint;
     window()->setAttribute(Qt::WA_Mapped);
-    d->_pAppBarHeight = 45;
+    d->_pAppBarHeight = 27;
     setFixedHeight(d->_pAppBarHeight);
     window()->setContentsMargins(0, this->height(), 0, 0);
     d->q_ptr = this;
