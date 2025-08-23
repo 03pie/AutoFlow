@@ -18,8 +18,8 @@ FILE(GLOB INCLUDE *.h)
 FILE(GLOB SOURCE  *.cpp)
 
 # 分组显示（VS友好）
-source_group(include FILES  ${INCLUDE})
-source_group(source FILES  ${SOURCE})
+source_group(01_Include FILES  ${INCLUDE})
+source_group(02_Source FILES  ${SOURCE})
 
 # 显式添加头文件
 target_sources(${PROJECT_NAME} PRIVATE  
