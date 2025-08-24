@@ -36,6 +36,7 @@ ElaWindow::ElaWindow(QWidget* parent)
     d->q_ptr = this;
     d->_pStackSwitchMode = ElaWindowType::StackSwitchMode::Popup;
     setProperty("ElaBaseClassName", "ElaWindow");
+    setProperty("MainWindow", true);
     resize(1020, 680); // 默认宽高
 
     d->_pThemeChangeTime = 700;

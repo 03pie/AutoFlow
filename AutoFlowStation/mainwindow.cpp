@@ -33,12 +33,15 @@
  ***************************************************************************/
 MainWindow::MainWindow(QWidget* parent)
     : ElaWindow(parent),
-      close_dialog_(new ElaContentDialog(this)),
-	  plugin_manager_(new PluginManager()
+    menu_bar_ (new ElaMenuBar(this)),
+    tool_bar_(new ElaToolBar(MainWindowDefine::kToolBarTitle, this)),
+	status_bar_(new ElaStatusBar(this)),
+    close_dialog_(new ElaContentDialog(this)),
+    plugin_manager_(new PluginManager()
     ) 
 {
-    // 拦截默认关闭事件
-    this->setIsDefaultClosed(false);
+    //拦截默认关闭事件
+    setIsDefaultClosed(false);
 
 	//初始化窗口
     initWindow();
@@ -106,7 +109,7 @@ void MainWindow::initWindow()
     // 设置窗口显示图标
     setWindowIcon(QIcon(MainWindowDefine::kMainWindowIconPath));
 	// 设置窗口标题
-    //setWindowTitle(QString{ MainWindowDefine::kMainWindowTitle });
+    setWindowTitle(window_title_);
 }
 
 /***************************************************************************
@@ -120,94 +123,14 @@ void MainWindow::initWindow()
 void MainWindow::initEdgeLayout()
 {
     //菜单栏
-    menu_bar_ = new ElaMenuBar(this);
-    //menuBar->setFixedHeight(30);
-    QWidget* customWidget = new QWidget(this);
-    QVBoxLayout* customLayout = new QVBoxLayout(customWidget);
-    customLayout->setContentsMargins(0, 0, 0, 0);
-    customLayout->addWidget(menu_bar_);
-    customLayout->addStretch();
-    this->setCustomWidget(ElaAppBarType::LeftArea, customWidget);
-    this->setCustomWidgetMaximumWidth(700);
-
-	// 创建菜单栏内容
-    createMenuFromJson(MainWindowDefine::kGeneralPluginUIConfigPath);
-
+    configMenuBar();
     //工具栏
-    ElaToolBar* toolBar = new ElaToolBar("工具栏", this);
-    toolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-    toolBar->setToolBarSpacing(3);
-    toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    toolBar->setIconSize(QSize(25, 25));
-    // toolBar->setFloatable(false);
-    // toolBar->setMovable(false);
-    ElaToolButton* toolButton1 = new ElaToolButton(this);
-    toolButton1->setElaIcon(ElaIconType::BadgeCheck);
-    toolBar->addWidget(toolButton1);
-    ElaToolButton* toolButton2 = new ElaToolButton(this);
-    toolButton2->setElaIcon(ElaIconType::ChartUser);
-    toolBar->addWidget(toolButton2);
-    toolBar->addSeparator();
-    ElaToolButton* toolButton3 = new ElaToolButton(this);
-    toolButton3->setElaIcon(ElaIconType::Bluetooth);
-    toolButton3->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    toolButton3->setText("Bluetooth");
-    toolBar->addWidget(toolButton3);
-    ElaToolButton* toolButton4 = new ElaToolButton(this);
-    toolButton4->setElaIcon(ElaIconType::BringFront);
-    toolBar->addWidget(toolButton4);
-    toolBar->addSeparator();
-    ElaToolButton* toolButton5 = new ElaToolButton(this);
-    toolButton5->setElaIcon(ElaIconType::ChartSimple);
-    toolBar->addWidget(toolButton5);
-    ElaToolButton* toolButton6 = new ElaToolButton(this);
-    toolButton6->setElaIcon(ElaIconType::FaceClouds);
-    toolBar->addWidget(toolButton6);
-    ElaToolButton* toolButton8 = new ElaToolButton(this);
-    toolButton8->setElaIcon(ElaIconType::Aperture);
-    toolBar->addWidget(toolButton8);
-    ElaToolButton* toolButton9 = new ElaToolButton(this);
-    toolButton9->setElaIcon(ElaIconType::ChartMixed);
-    toolBar->addWidget(toolButton9);
-    ElaToolButton* toolButton10 = new ElaToolButton(this);
-    toolButton10->setElaIcon(ElaIconType::Coins);
-    toolBar->addWidget(toolButton10);
-    ElaToolButton* toolButton11 = new ElaToolButton(this);
-    toolButton11->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    toolButton11->setElaIcon(ElaIconType::AlarmPlus);
-    toolButton11->setText("AlarmPlus");
-    toolBar->addWidget(toolButton11);
-    ElaToolButton* toolButton12 = new ElaToolButton(this);
-    toolButton12->setElaIcon(ElaIconType::Crown);
-    toolBar->addWidget(toolButton12);
-    QAction* test = new QAction(this);
-    test->setMenu(new QMenu(this));
+	configToolBar();
 
-    ElaProgressBar* progressBar = new ElaProgressBar(this);
-    progressBar->setMinimum(0);
-    progressBar->setMaximum(0);
-    progressBar->setFixedWidth(350);
-    toolBar->addWidget(progressBar);
-
-    this->addToolBar(Qt::TopToolBarArea, toolBar);
-
-    ////停靠窗口
-    //ElaDockWidget* logDockWidget = new ElaDockWidget("日志信息", this);
-    //logDockWidget->setWidget(new T_LogWidget(this));
-    //this->addDockWidget(Qt::RightDockWidgetArea, logDockWidget);
-    //resizeDocks({ logDockWidget }, { 200 }, Qt::Horizontal);
-
-    //ElaDockWidget* updateDockWidget = new ElaDockWidget("更新内容", this);
-    //updateDockWidget->setWidget(new T_UpdateWidget(this));
-    //this->addDockWidget(Qt::RightDockWidgetArea, updateDockWidget);
-    //resizeDocks({ updateDockWidget }, { 200 }, Qt::Horizontal);
-
+	//停靠窗口
+    configDockWidget();
     //状态栏
-    ElaStatusBar* statusBar = new ElaStatusBar(this);
-    ElaText* statusText = new ElaText("初始化成功!!！", this);
-    statusText->setTextPixelSize(14);
-    statusBar->addWidget(statusText);
-    this->setStatusBar(statusBar);
+    configStatusBar();
 }
 
 /***************************************************************************
@@ -249,6 +172,63 @@ void MainWindow::initConnect()
     connect(this, &MainWindow::closeButtonClicked, this, [=]() {close_dialog_->exec(); });
 }
 
+void MainWindow::configMenuBar()
+{
+    //menuBar->setFixedHeight(30);
+    QWidget* customWidget = new QWidget(this);
+    QVBoxLayout* customLayout = new QVBoxLayout(customWidget);
+    customLayout->setContentsMargins(0, 0, 0, 0);
+    customLayout->addWidget(menu_bar_);
+    customLayout->addStretch();
+    this->setCustomWidget(ElaAppBarType::LeftArea, customWidget);
+    this->setCustomWidgetMaximumWidth(700);
+    // 创建菜单栏内容
+    createMenuFromJson(MainWindowDefine::kGeneralPluginUIConfigPath);
+}
+
+void MainWindow::configToolBar()
+{
+    tool_bar_->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    tool_bar_->setToolBarSpacing(3);
+    tool_bar_->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    tool_bar_->setIconSize(QSize(25, 25));
+    // tool_bar_->setFloatable(false);
+    // tool_bar_->setMovable(false);
+    // 创建工具栏内容
+    createToolBarFromJson(MainWindowDefine::kGeneralPluginUIConfigPath);
+
+    // 显示进度条
+    ElaProgressBar* progressBar = new ElaProgressBar(this);
+    progressBar->setMinimum(0);
+    progressBar->setMaximum(0);
+    progressBar->setFixedWidth(350);
+    tool_bar_->addWidget(progressBar);
+
+    this->addToolBar(Qt::TopToolBarArea, tool_bar_);
+}
+
+void MainWindow::configDockWidget()
+{
+    ////停靠窗口
+    //ElaDockWidget* logDockWidget = new ElaDockWidget("日志信息", this);
+    //logDockWidget->setWidget(new T_LogWidget(this));
+    //this->addDockWidget(Qt::RightDockWidgetArea, logDockWidget);
+    //resizeDocks({ logDockWidget }, { 200 }, Qt::Horizontal);
+
+    //ElaDockWidget* updateDockWidget = new ElaDockWidget("更新内容", this);
+    //updateDockWidget->setWidget(new T_UpdateWidget(this));
+    //this->addDockWidget(Qt::RightDockWidgetArea, updateDockWidget);
+    //resizeDocks({ updateDockWidget }, { 200 }, Qt::Horizontal);
+}
+
+void MainWindow::configStatusBar()
+{
+    ElaText* statusText = new ElaText("初始化成功!!！", this);
+    statusText->setTextPixelSize(14);
+    status_bar_->addWidget(statusText);
+    this->setStatusBar(status_bar_);
+}
+
 /***************************************************************************
  * @brief       从 JSON 文件创建页面
  * @details     该方法负责读取指定的 JSON 文件，并根据文件内容动态创建页面
@@ -260,7 +240,7 @@ void MainWindow::initConnect()
  ***************************************************************************/
 void MainWindow::createPageFromJson(const QString& jsonFilePath)
 {
-    QJsonArray pages_array = readJsonArrayFromFile(jsonFilePath, MainWindowDefine::kPageConfigKey); // 获取 "pages" 数组
+    QJsonArray pages_array = readJsonArrayFromFile(jsonFilePath, MainWindowDefine::kJsonPageConfigKey); // 获取 "pages" 数组
 
     for (const QJsonValue& item_page : pages_array)
     {
@@ -327,7 +307,39 @@ void MainWindow::createMenuFromJson(const QString& jsonFilePath)
         createActionsConnect(menu_root, menu_actions);
 		// 递归添加子菜单
         QJsonArray submenu_array = menu_obj.value(MainWindowDefine::kJsonSubmenusKey).toArray();
-        addMenuItems(menu_root, submenu_array); 
+        createMenuItems(menu_root, submenu_array);
+    }
+}
+
+void MainWindow::createToolBarFromJson(const QString& jsonFilePath)
+{
+    QJsonArray tool_bar_array = readJsonArrayFromFile(jsonFilePath, MainWindowDefine::kJsonToolbarsKey); // 获取 "tool_bar" 数组
+    for (const QJsonValue& item_tool : tool_bar_array)
+    {
+        if (!item_tool.isObject())
+        {
+            qDebug() << "菜单项格式错误，期望为 JSON 对象";
+            continue;
+        }
+        // 创建菜单节点
+        QJsonObject tool_obj = item_tool.toObject();
+        QString tool_name = tool_obj.value(MainWindowDefine::kJsonNameKey).toString();
+        QString tool_type = tool_obj.value(MainWindowDefine::kJsonTypeKey).toString();
+		QString tool_icon = tool_obj.value(MainWindowDefine::kJsonIconKey).toString();
+		QString tool_plugin = tool_obj.value(MainWindowDefine::kJsonPluginKey).toString().append(QString::fromStdString(SHARED_LIB_SUFFIX));
+		QString tool_function = tool_obj.value(MainWindowDefine::kJsonFunctionKey).toString();
+       
+        ElaToolButton* tool_button = new ElaToolButton(this);
+        tool_button->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(tool_type.toUInt()));
+        tool_button->setElaIcon(static_cast<ElaIconType::IconName>(tool_icon.toLongLong({}, 16)));
+        tool_button->setText(tool_name);
+        connect(tool_button, &ElaToolButton::clicked, this, [this, tool_plugin, tool_function](){ excutePluginFunction(tool_plugin, tool_function);});
+        tool_bar_->addWidget(tool_button);
+
+        if (tool_obj.value(MainWindowDefine::kJsonSeparatorKey).toBool(false))
+        {
+            tool_bar_->addSeparator();
+        }
     }
 }
 
@@ -340,7 +352,7 @@ void MainWindow::createMenuFromJson(const QString& jsonFilePath)
  * @see         MainWindow::createMenuFromJson()
  * @warning     如果 JSON 格式不正确，可能导致菜单项添加失败。
  ***************************************************************************/
-void MainWindow::addMenuItems(ElaMenu* SubMenu, const QJsonArray& SubMenuArray)
+void MainWindow::createMenuItems(ElaMenu* SubMenu, const QJsonArray& SubMenuArray)
 {
     for (const QJsonValue& iterm_subMenu : SubMenuArray)
     {
@@ -358,7 +370,7 @@ void MainWindow::addMenuItems(ElaMenu* SubMenu, const QJsonArray& SubMenuArray)
 		createActionsConnect(submenu, subactions);
 		// 递归添加子菜单
         QJsonArray submenu_array = subitem_obj.value(MainWindowDefine::kJsonSubmenusKey).toArray();
-        addMenuItems(submenu, submenu_array); 
+        createMenuItems(submenu, submenu_array);
     }
 }
 
@@ -392,21 +404,22 @@ void MainWindow::createActionsConnect(ElaMenu* Menu, QJsonArray& ActionsArray)
         QString action_plugin = action_obj.value(MainWindowDefine::kJsonPluginKey).toString().append(QString::fromStdString(SHARED_LIB_SUFFIX));
         QString action_function = action_obj.value(MainWindowDefine::kJsonFunctionKey).toString();
 
-        connect(Menu->addElaIconAction(static_cast<ElaIconType::IconName>(action_icon.toULongLong({}, 16)), action_name, static_cast<QKeySequence::StandardKey>(action_shortcut.toUInt())),
-            &QAction::triggered, this, [this, action_plugin, action_function]()
-            {
-                // 处理插件和功能的调用
-                if (!action_plugin.isEmpty() && !action_function.isEmpty())
-                {
-                    // TODO: 调用插件的功能
-                }
-            }
-        );
+        QAction* action = Menu->addElaIconAction(static_cast<ElaIconType::IconName>(action_icon.toULongLong({}, 16)), action_name, static_cast<QKeySequence::StandardKey>(action_shortcut.toUInt()));
+        connect(action, &QAction::triggered, this, [this, action_plugin, action_function](){ excutePluginFunction(action_plugin, action_function); });
 
         if (action_obj.value(MainWindowDefine::kJsonSeparatorKey).toBool(false))
         {
             Menu->addSeparator();
         }
+    }
+}
+
+void MainWindow::excutePluginFunction(const QString& pluginName, const QString& functionName)
+{
+    // 处理插件和功能的调用
+    if (!pluginName.isEmpty() && !functionName.isEmpty())
+    {
+        // TODO: 调用插件的功能
     }
 }
 

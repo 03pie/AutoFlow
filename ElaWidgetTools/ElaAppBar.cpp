@@ -122,10 +122,9 @@ ElaAppBar::ElaAppBar(QWidget* parent)
     }
     connect(parent, &QWidget::windowTitleChanged, this, [=](const QString& title) {
         d->_titleLabel->setText(title);
-        d->_titleLabel->setVisible(title.isEmpty() ? false : true);
+        d->_titleLabel->setVisible(title.isEmpty() || parent->property("MainWindow").toBool() ? false : true);
         d->_titleLabelLayout->setContentsMargins(title.isEmpty() ? 0 : 10, 0, 0, 0);
     });
-
     // 主题变更
     d->_themeChangeButton = new ElaToolButton(this);
     d->_themeChangeButton->setElaIcon(ElaIconType::MoonStars);

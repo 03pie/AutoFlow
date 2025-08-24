@@ -3,12 +3,15 @@
 namespace MainWindowDefine
 {
     const QString kMainWindowTitle           = "AutoFlowStation"; // 窗口标题
+    const QString kToolBarTitle              = "工具栏"; // 工具栏标题
 
     const QString kMainWindowIconPath        = ":/Resource/Image/Icon.png"; // 窗口图标路径
     const QString kGeneralPluginUIConfigPath = "GeneralPluginUIConfig.json"; // 菜单栏配置文件路径
 
     const QString kJsonMenusKey              = "menus"; // JSON 菜单键
-    const QString kPageConfigKey             = "pages"; // JSON 页面配置键
+    const QString kJsonPageConfigKey         = "pages"; // JSON 页面配置键
+    const QString kJsonToolbarsKey           = "toolbars"; // JSON 工具栏键
+
     const QString kJsonActionsKey            = "actions"; // JSON 动作键
     const QString kJsonSubmenusKey           = "submenus"; // JSON 子菜单键
 

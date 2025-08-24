@@ -63,3 +63,4 @@ CMakePresets.json
 CMakeUserPresets.json
 /.vscode
 build
+CMakeSettings.json
