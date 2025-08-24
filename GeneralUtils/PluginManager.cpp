@@ -1,6 +1,7 @@
 ﻿#include "PluginManager.h"
 
-void PluginManager::LoadPluginFromPath(const std::string& path) {
+void PluginManager::LoadPluginFromPath(const std::string& path) 
+{
 #ifdef _WIN32
     HMODULE hModule = LoadLibraryA(path.c_str());
     if (!hModule) {  return; }

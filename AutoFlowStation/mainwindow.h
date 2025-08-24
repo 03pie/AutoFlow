@@ -22,9 +22,12 @@ public:
     void initContent();
     void initConnect();
 
+    void createPageFromJson(const QString& jsonFilePath);
     void createMenuFromJson(const QString& jsonFilePath);
     void addMenuItems(ElaMenu* SubMenu, const QJsonArray& SubMenuArray);
 	void createActionsConnect(ElaMenu* Menu, QJsonArray& ActionsArray);
+
+	QJsonArray readJsonArrayFromFile(const QString& filePath, const QString& arrayKey);
 
 protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);

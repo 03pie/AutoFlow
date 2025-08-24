@@ -90,7 +90,7 @@ void MainWindow::initWindow()
     // 设置导航栏启用
     setIsNavigationBarEnable(true);
     // 设置导航栏显示模式
-    setNavigationBarDisplayMode(ElaNavigationType::Compact);
+    setNavigationBarDisplayMode(ElaNavigationType::Auto);
     // 设置窗口按钮标志
     //setWindowButtonFlag(ElaAppBarType::MinimizeButtonHint, false);
     // 设置用户信息卡片不可见
@@ -131,7 +131,7 @@ void MainWindow::initEdgeLayout()
     this->setCustomWidgetMaximumWidth(700);
 
 	// 创建菜单栏内容
-    createMenuFromJson(MainWindowDefine::kMenuBarConfigPath);
+    createMenuFromJson(MainWindowDefine::kGeneralPluginUIConfigPath);
 
     //工具栏
     ElaToolBar* toolBar = new ElaToolBar("工具栏", this);
@@ -204,7 +204,7 @@ void MainWindow::initEdgeLayout()
 
     //状态栏
     ElaStatusBar* statusBar = new ElaStatusBar(this);
-    ElaText* statusText = new ElaText("初始化成功！", this);
+    ElaText* statusText = new ElaText("初始化成功!!！", this);
     statusText->setTextPixelSize(14);
     statusBar->addWidget(statusText);
     this->setStatusBar(statusBar);
@@ -220,27 +220,8 @@ void MainWindow::initEdgeLayout()
  ***************************************************************************/
 void MainWindow::initContent()
 {
-    plugin_manager_->LoadPluginFromPath("GeneralWidget.dll");
-    for (int i = 0; i < plugin_manager_->GetPluginCount(); ++i) 
-    {
-        auto plugin_info = plugin_manager_->GetPluginInformation(i);
-        try 
-        {
-            QWidget* plugin_widget = static_cast<QWidget*>(plugin_info.plugin_instance->createInstance(this));
-            if (plugin_widget)
-            {
-                addPageNode(QString::fromStdString("Home"),
-                    plugin_widget,
-                    ElaIconType::PuzzlePiece);
-            }
-        }
-        catch (const std::exception& e) {
-            qDebug() << "Plugin exception:" << e.what();
-        }
-        catch (...) {
-            qDebug() << "Unknown plugin exception";
-        }
-    }
+
+	createPageFromJson(MainWindowDefine::kGeneralPluginUIConfigPath);
     qDebug() << "已注册的事件列表" << ElaEventBus::getInstance()->getRegisteredEventsName();
 }
 
@@ -269,6 +250,54 @@ void MainWindow::initConnect()
 }
 
 /***************************************************************************
+ * @brief       从 JSON 文件创建页面
+ * @details     该方法负责读取指定的 JSON 文件，并根据文件内容动态创建页面
+ *              该方法应在 initUI() 之后调用，以确保 UI 已初始化。
+ * @param[in]   jsonFilePath JSON 文件路径
+ * @return      void 无返回值
+ * @see         MainWindow::initUI()
+ * @warning     如果 JSON 文件格式不正确，可能导致页面创建失败。
+ ***************************************************************************/
+void MainWindow::createPageFromJson(const QString& jsonFilePath)
+{
+    QJsonArray pages_array = readJsonArrayFromFile(jsonFilePath, MainWindowDefine::kPageConfigKey); // 获取 "pages" 数组
+
+    for (const QJsonValue& item_page : pages_array)
+    {
+        if (!item_page.isObject())
+        {
+            qDebug() << "页面项格式错误，期望为 JSON 对象";
+            continue;
+        }
+        // 创建页面节点
+        QJsonObject page_obj = item_page.toObject();
+        QString page_name = page_obj.value(MainWindowDefine::kJsonNameKey).toString();
+        QString page_icon = page_obj.value(MainWindowDefine::kJsonIconKey).toString();
+        QString page_plugin = page_obj.value(MainWindowDefine::kJsonPluginKey).toString().append(QString::fromStdString(SHARED_LIB_SUFFIX));
+
+        // 创建页面并添加到主窗口
+        plugin_manager_->LoadPluginFromPath(page_plugin.toStdString());
+		auto plugin_info = plugin_manager_->GetPluginInformation(plugin_manager_->GetPluginCount() - 1);
+        try
+        {
+            QWidget* plugin_widget = static_cast<QWidget*>(plugin_info.plugin_instance->createInstance(this));
+            if (plugin_widget)
+            {
+                addPageNode(page_name,
+                    plugin_widget,
+                    static_cast<ElaIconType::IconName>(page_icon.toLongLong({}, 16)));
+            }
+        }
+        catch (const std::exception& e) {
+            qDebug() << "Plugin exception:" << e.what();
+        }
+        catch (...) {
+            qDebug() << "Unknown plugin exception";
+        }
+    }
+}
+
+/***************************************************************************
  * @brief       从 JSON 文件创建菜单
  * @details     该方法负责读取指定的 JSON 文件，并根据文件内容动态创建菜单
  *              该方法应在 initUI() 之后调用，以确保 UI 已初始化。
@@ -279,26 +308,7 @@ void MainWindow::initConnect()
  ***************************************************************************/
 void MainWindow::createMenuFromJson(const QString& jsonFilePath)
 {
-    QFile file(jsonFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() << "无法打开菜单配置文件:" << jsonFilePath;
-        return;
-    }
-
-    QByteArray json_data = file.readAll();
-    file.close();
-
-    QJsonDocument json_doc = QJsonDocument::fromJson(json_data);
-    if (!json_doc.isObject())
-    {
-        qDebug() << "菜单配置文件格式错误，期望为 JSON 对象";
-        return;
-    }
-
-    QJsonObject json_root_obj = json_doc.object();
-    QJsonArray menus_array = json_root_obj[MainWindowDefine::kJsonMenusKey].toArray(); // 获取 "menus" 数组
-
+    QJsonArray menus_array = readJsonArrayFromFile(jsonFilePath, MainWindowDefine::kJsonMenusKey); // 获取 "menus" 数组
     for (const QJsonValue& item_menu : menus_array)
     {
         if (!item_menu.isObject())
@@ -379,7 +389,7 @@ void MainWindow::createActionsConnect(ElaMenu* Menu, QJsonArray& ActionsArray)
         QString action_name = action_obj.value(MainWindowDefine::kJsonNameKey).toString();
         QString action_shortcut = action_obj.value(MainWindowDefine::kJsonShortcutKey).toString();
         QString action_icon = action_obj.value(MainWindowDefine::kJsonIconKey).toString();
-        QString action_plugin = action_obj.value(MainWindowDefine::kJsonPluginKey).toString();
+        QString action_plugin = action_obj.value(MainWindowDefine::kJsonPluginKey).toString().append(QString::fromStdString(SHARED_LIB_SUFFIX));
         QString action_function = action_obj.value(MainWindowDefine::kJsonFunctionKey).toString();
 
         connect(Menu->addElaIconAction(static_cast<ElaIconType::IconName>(action_icon.toULongLong({}, 16)), action_name, static_cast<QKeySequence::StandardKey>(action_shortcut.toUInt())),
@@ -398,6 +408,38 @@ void MainWindow::createActionsConnect(ElaMenu* Menu, QJsonArray& ActionsArray)
             Menu->addSeparator();
         }
     }
+}
+
+/***************************************************************************
+ * @brief       从文件中读取 JSON 数组
+ * @details     该方法负责从指定的 JSON 文件中读取数组
+ * @param[in]   filePath 文件路径
+ * @param[in]   arrayKey 数组键
+ * @return      QJsonArray 读取到的 JSON 数组
+ * @see         MainWindow::readJsonArrayFromFile()
+ * @warning     如果文件无法打开或格式不正确，可能导致读取失败。
+ ***************************************************************************/
+QJsonArray MainWindow::readJsonArrayFromFile(const QString& filePath, const QString& arrayKey)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "无法打开菜单配置文件:" << filePath;
+        return QJsonArray{};
+    }
+
+    QByteArray json_data = file.readAll();
+    file.close();
+
+    QJsonDocument json_doc = QJsonDocument::fromJson(json_data);
+    if (!json_doc.isObject())
+    {
+        qDebug() << "菜单配置文件格式错误，期望为 JSON 对象";
+        return QJsonArray{};
+    }
+
+    QJsonObject json_root_obj = json_doc.object();
+    return json_root_obj[arrayKey].toArray();
 }
 
 /***************************************************************************
