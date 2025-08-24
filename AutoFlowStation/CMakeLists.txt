@@ -38,7 +38,7 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         list(APPEND resource_files ${filename})
     endforeach (filepath)
 
-    qt_add_resources(${PROJECT_NAME} "AutoFlowStation"
+    qt_add_resources(${PROJECT_NAME} ${PROJECT_NAME}
         RESOURCES PREFIX "/"
         FILES
         ${resource_files}

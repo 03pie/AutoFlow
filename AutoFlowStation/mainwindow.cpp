@@ -130,17 +130,8 @@ void MainWindow::initEdgeLayout()
     this->setCustomWidget(ElaAppBarType::LeftArea, customWidget);
     this->setCustomWidgetMaximumWidth(700);
 
+	// 创建菜单栏内容
     createMenuFromJson(MainWindowDefine::kMenuBarConfigPath);
-    //ElaMenu* iconMenu = menuBar->addMenu(ElaIconType::Aperture, "编辑");
-    //iconMenu->setMenuItemHeight(27);
-    //iconMenu->addElaIconAction(ElaIconType::BoxCheck, "排序方式", QKeySequence::SelectAll);
-    //iconMenu->addElaIconAction(ElaIconType::Copy, "复制");
-    //iconMenu->addElaIconAction(ElaIconType::MagnifyingGlassPlus, "显示设置");
-    //iconMenu->addSeparator();
-    //iconMenu->addElaIconAction(ElaIconType::ArrowRotateRight, "刷新");
-    //iconMenu->addElaIconAction(ElaIconType::ArrowRotateLeft, "撤销");
-    //menuBar->addSeparator();
-
 
     //工具栏
     ElaToolBar* toolBar = new ElaToolBar("工具栏", this);
@@ -229,6 +220,27 @@ void MainWindow::initEdgeLayout()
  ***************************************************************************/
 void MainWindow::initContent()
 {
+    plugin_manager_->LoadPluginFromPath("GeneralWidget.dll");
+    for (int i = 0; i < plugin_manager_->GetPluginCount(); ++i) 
+    {
+        auto plugin_info = plugin_manager_->GetPluginInformation(i);
+        try 
+        {
+            QWidget* plugin_widget = static_cast<QWidget*>(plugin_info.plugin_instance->createInstance(this));
+            if (plugin_widget)
+            {
+                addPageNode(QString::fromStdString("Home"),
+                    plugin_widget,
+                    ElaIconType::PuzzlePiece);
+            }
+        }
+        catch (const std::exception& e) {
+            qDebug() << "Plugin exception:" << e.what();
+        }
+        catch (...) {
+            qDebug() << "Unknown plugin exception";
+        }
+    }
     qDebug() << "已注册的事件列表" << ElaEventBus::getInstance()->getRegisteredEventsName();
 }
 
@@ -370,7 +382,7 @@ void MainWindow::createActionsConnect(ElaMenu* Menu, QJsonArray& ActionsArray)
         QString action_plugin = action_obj.value(MainWindowDefine::kJsonPluginKey).toString();
         QString action_function = action_obj.value(MainWindowDefine::kJsonFunctionKey).toString();
 
-        connect(Menu->addElaIconAction(static_cast<ElaIconType::IconName>(action_icon.toUInt()), action_name, static_cast<QKeySequence::StandardKey>(action_shortcut.toUInt())),
+        connect(Menu->addElaIconAction(static_cast<ElaIconType::IconName>(action_icon.toULongLong({}, 16)), action_name, static_cast<QKeySequence::StandardKey>(action_shortcut.toUInt())),
             &QAction::triggered, this, [this, action_plugin, action_function]()
             {
                 // 处理插件和功能的调用

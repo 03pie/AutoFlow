@@ -33,5 +33,7 @@ private:
 	PluginManager* plugin_manager_{ nullptr };   // 插件管理器
     ElaContentDialog* close_dialog_{ nullptr };  // 自定义关闭对话框
 	ElaMenuBar* menu_bar_{ nullptr };            // 自定义菜单栏
+
+	QWidget* T_home_{ nullptr };
 };
 #endif // MAINWINDOW_H

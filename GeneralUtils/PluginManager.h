@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <string>
-
+#include <filesystem>
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -15,44 +15,52 @@
 #endif
 
 // ---------------------- 插件接口 ----------------------
-class IPlugin {
-public:
-	virtual ~IPlugin() = default;
-
-	virtual std::string GetName() const = 0;
-	virtual void Execute() = 0;
+struct IPlugin {
+    virtual ~IPlugin() = default;
+    virtual void* createInstance(void* context) = 0;
+    virtual bool isUIPlugin() const { return false; }
 };
 
-// 工厂函数签名
-using CreatePluginFunction = IPlugin * (*)();
+using CreatePluginFunction  = IPlugin* (*)();
 using DestroyPluginFunction = void (*)(IPlugin*);
 
 // ------------------ 插件管理器 ----------------------
+namespace fs = std::filesystem;
+
 struct PluginInformation {
 #ifdef _WIN32
-	HMODULE module_handle_{};
+    HMODULE module_handle{};
 #else
-	void* module_handle_{};
+    void* module_handle{};
 #endif
-	IPlugin* plugin_instance_{};
-	DestroyPluginFunction destroy_function_{};
+    IPlugin* plugin_instance{};
+    DestroyPluginFunction destroy_function{};
+    std::string file_path;
+    void* ui_widget{nullptr}; // 宿主可以 cast 成 QWidget*
 };
 
-class PLUGINFRAMEWORK_API PluginManager 
-{
+class PLUGINFRAMEWORK_API PluginManager {
 public:
-	PluginManager();
-	~PluginManager();
+    PluginManager() = default;
+    ~PluginManager() { UnloadAllPlugins(); }
 
-	void LoadPluginFromPath(const std::string& plugin_file_path);
-	void LoadPluginsFromDirectory(const std::string& directory_path);
-	void ExecuteAllPlugins();
-	void UnloadAllPlugins();
+    void LoadPluginFromPath(const std::string& path);
+    void LoadPluginsFromDirectory(const std::string& dir_path);
+    void UnloadAllPlugins();
+    int FindPluginIndexByPath(const std::string& path) const;
 
-	size_t GetPluginCount() const;
-	PluginInformation GetPluginInformation(size_t plugin_index) const;
+    size_t GetPluginCount() const { return plugins_.size(); }
+    PluginInformation& GetPluginInformation(size_t index) { return plugins_.at(index); }
+
+    template<typename T>
+    T* GetPluginInstance(size_t index, void* parent = nullptr) {
+        if (index >= plugins_.size()) return nullptr;
+        IPlugin* plugin = plugins_[index].plugin_instance;
+        if (!plugin) return nullptr;
+        void* ptr = plugin->createInstance(parent);
+        return static_cast<T*>(ptr);
+    }
 
 private:
-	struct ImplementationDetail;
-	ImplementationDetail* implementation_detail_pointer_{};
+    std::vector<PluginInformation> plugins_;
 };
