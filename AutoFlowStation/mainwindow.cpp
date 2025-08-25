@@ -40,9 +40,6 @@ MainWindow::MainWindow(QWidget* parent)
     plugin_manager_(new PluginManager()
     ) 
 {
-    //拦截默认关闭事件
-    setIsDefaultClosed(false);
-
 	//初始化窗口
     initWindow();
 
@@ -110,6 +107,8 @@ void MainWindow::initWindow()
     setWindowIcon(QIcon(MainWindowDefine::kMainWindowIconPath));
 	// 设置窗口标题
     setMainWindowName(MainWindowDefine::kMainWindowTitle);
+    //拦截默认关闭事件
+    setIsDefaultClosed(false);
 }
 
 /***************************************************************************
