@@ -487,3 +487,4 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event)
     }
     ElaWindow::mouseReleaseEvent(event);
 }
+ 
