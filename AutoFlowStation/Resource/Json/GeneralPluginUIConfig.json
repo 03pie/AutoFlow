@@ -1,0 +1,171 @@
+{
+    "pages": [
+        {
+            "name": "Home",
+            "icon": "0xe83d",
+            "plugin": "GeneralWidget"
+        },
+        {
+            "name": "Settings",
+            "icon": "0xe8aa",
+            "plugin": "GeneralWidget"
+        }
+    ],
+    "menus": [
+        {
+            "name": "文件(&F)",
+            "type": "file",
+            "actions": [
+                { "name": "新建", "shortcut": "26", "icon": "0xe978", "plugin":"aaa", "function":"add()", "separator": true },
+                { "name": "打开", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenus": [
+                {
+                    "name": "导入",
+                    "shortcut": "26",
+                    "icon": "0xe978",
+                    "actions": [
+                        { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                        { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                    ],
+                    "submenus": [
+                        {
+                            "name": "导入",
+                            "shortcut": "26",
+                            "icon": "0xe978",
+                            "actions": [
+                                { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                                { "name": "从数据库", "shortcut": "26", "icon": "0xe978" },
+                                { "name": "从文件", "shortcut": "26", "icon": "0xe978", "separator": true },
+                                { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                            ],
+                            "submenus": []
+                        }
+                    ]
+                },
+                {
+                    "name": "导入",
+                    "shortcut": "26",
+                    "icon": "0xe978",
+                    "actions": [
+                        { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                        { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                    ],
+                    "submenus": [
+                        {
+                            "name": "导入",
+                            "shortcut": "26",
+                            "icon": "0xe978",
+                            "actions": [
+                                { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                                { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                            ],
+                            "submenus": []
+                        },
+                        {
+                            "name": "导入",
+                            "shortcut": "26",
+                            "icon": "0xe978",
+                            "actions": [
+                                { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                                { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                            ],
+                            "submenus": [
+                                {
+                                    "name": "导入",
+                                    "shortcut": "26",
+                                    "icon": "0xe978",
+                                    "actions": [
+                                        { "name": "从文件", "shortcut": "26", "icon": "0xe978" },
+                                        { "name": "从数据库", "shortcut": "26", "icon": "0xe978" }
+                                    ],
+                                    "submenus": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+         {
+            "name": "项目(&P)",
+            "type": "project",
+            "actions": [
+                { "name": "新建项目", "shortcut": "26", "icon": "0xe978" },
+                { "name": "打开项目", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": []
+        },
+        {
+            "name": "编辑(&E)",
+            "type": "edit",
+            "actions": [
+                { "name": "撤销", "shortcut": "26", "icon": "0xe978" },
+                { "name": "重做", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": [
+                {
+                    "name": "剪切",
+                    "shortcut": "26",
+                    "icon": "0xe978",
+                    "actions": [],
+                    "submenu": []
+                },
+                {
+                    "name": "复制",
+                    "shortcut": "26",
+                    "icon": "0xe978",
+                    "actions": [],
+                    "submenu": []
+                },
+                {
+                    "name": "粘贴",
+                    "shortcut": "26",
+                    "icon": "0xe978",
+                    "actions": [],
+                    "submenu": []
+                }
+            ]
+        },
+        {
+            "name": "视图(&V)",
+            "type": "view",
+            "actions": [
+                { "name": "放大", "shortcut": "26", "icon": "0xe978" },
+                { "name": "缩小", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": []
+        },
+        {
+            "name": "调试(&D)",
+            "type": "debug",
+            "actions": [
+                { "name": "开始调试", "shortcut": "26", "icon": "0xe978" },
+                { "name": "停止调试", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": []
+        },
+        {
+            "name": "窗口(&W)",
+            "type": "window",
+            "actions": [
+                { "name": "最小化", "shortcut": "26", "icon": "0xe978" },
+                { "name": "最大化", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": []
+        },
+        {
+            "name": "帮助(&H)",
+            "type": "help",
+            "actions": [
+                { "name": "关于", "shortcut": "26", "icon": "0xe978" }
+            ],
+            "submenu": []
+        }
+    ],
+    "toolbars": [
+       { "name": "新建", "type": "2", "icon": "0xe9a3", "plugin":"aaa", "function":"add()", "separator": true },
+       { "name": "打开", "type": "0", "icon": "0xe978", "plugin":"aaa", "function":"open()", "separator": false },
+       { "name": "保存", "type": "0", "icon": "0xe9a3", "plugin":"aaa", "function":"save()", "separator": true }
+    ]
+}
