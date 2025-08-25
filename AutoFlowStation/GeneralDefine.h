@@ -6,7 +6,7 @@ namespace MainWindowDefine
     const QString kToolBarTitle              = "工具栏"; // 工具栏标题
 
     const QString kMainWindowIconPath        = ":/Resource/Image/Icon.png"; // 窗口图标路径
-    const QString kGeneralPluginUIConfigPath = "GeneralPluginUIConfig.json"; // 菜单栏配置文件路径
+    const QString kGeneralPluginUIConfigPath = ":/Resource/Json/GeneralPluginUIConfig.json"; // 菜单栏配置文件路径
 
     const QString kJsonMenusKey              = "menus"; // JSON 菜单键
     const QString kJsonPageConfigKey         = "pages"; // JSON 页面配置键
