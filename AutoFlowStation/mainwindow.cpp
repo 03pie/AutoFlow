@@ -103,13 +103,13 @@ void MainWindow::initWindow()
     //setUserInfoCardTitle("Ela Tool");
     //setUserInfoCardSubTitle("Liniyous@gmail.com");
     // 设置窗口置顶
-    setIsStayTop(true);
+    setIsStayTop(false);
     // 设置导航栏宽度
     setNavigationBarWidth(MainWindowDefine::kNavigationBarWidth);
     // 设置窗口显示图标
     setWindowIcon(QIcon(MainWindowDefine::kMainWindowIconPath));
 	// 设置窗口标题
-    setWindowTitle(window_title_);
+    setMainWindowName(MainWindowDefine::kMainWindowTitle);
 }
 
 /***************************************************************************

@@ -19,6 +19,7 @@ class ElaWindowPrivate : public QObject
 {
     Q_OBJECT
     Q_D_CREATE(ElaWindow)
+    Q_PROPERTY_CREATE_D(QString, MainWindowName)
     Q_PROPERTY_CREATE_D(int, ThemeChangeTime)
     Q_PROPERTY_CREATE_D(ElaNavigationType::NavigationDisplayMode, NavigationBarDisplayMode)
     Q_PROPERTY_CREATE_D(ElaWindowType::StackSwitchMode, StackSwitchMode)

@@ -2,7 +2,7 @@
 
 namespace MainWindowDefine
 {
-    const QString kMainWindowTitle           = "AutoFlowStation"; // 窗口标题
+    const QString kMainWindowTitle           = "AutoFlow Station"; // 窗口标题
     const QString kToolBarTitle              = "工具栏"; // 工具栏标题
 
     const QString kMainWindowIconPath        = ":/Resource/Image/Icon.png"; // 窗口图标路径

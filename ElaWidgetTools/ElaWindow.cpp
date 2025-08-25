@@ -72,6 +72,7 @@ ElaWindow::ElaWindow(QWidget* parent)
     // 导航中心堆栈窗口
     d->_navigationCenterStackedWidget = new ElaCentralStackedWidget(this);
     d->_navigationCenterStackedWidget->setContentsMargins(0, 0, 0, 0);
+    connect(d->_navigationCenterStackedWidget, &ElaCentralStackedWidget::currentChanged, this, &ElaWindow::onCurrentWidgetChange);
     QWidget* navigationCentralWidget = new QWidget(this);
     navigationCentralWidget->setObjectName("ElaWindowNavigationCentralWidget");
     navigationCentralWidget->setStyleSheet("#ElaWindowNavigationCentralWidget{background-color:transparent;}");
@@ -138,6 +139,16 @@ void ElaWindow::setIsStayTop(bool isStayTop)
 bool ElaWindow::getIsStayTop() const
 {
     return d_ptr->_appBar->getIsStayTop();
+}
+
+void ElaWindow::setMainWindowName(QString MainWindowName)
+{
+    d_ptr->_pMainWindowName = MainWindowName;
+}
+
+QString ElaWindow::getMainWindowName() const
+{
+    return d_ptr->_pMainWindowName;
 }
 
 void ElaWindow::setIsFixedSize(bool isFixedSize)
@@ -477,6 +488,14 @@ void ElaWindow::closeWindow()
     Q_D(ElaWindow);
     d->_isWindowClosing = true;
     d->_appBar->closeWindow();
+}
+
+void ElaWindow::onCurrentWidgetChange(int)
+{
+    Q_D(ElaWindow);
+    auto widget_title = d->_navigationCenterStackedWidget->currentWidget()->windowTitle();
+    widget_title.push_front('-');
+    setWindowTitle(d->_pMainWindowName.append(widget_title));
 }
 
 bool ElaWindow::eventFilter(QObject* watched, QEvent* event)

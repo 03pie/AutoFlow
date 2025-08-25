@@ -12,6 +12,7 @@ class ELA_EXPORT ElaWindow : public QMainWindow
     Q_OBJECT
     Q_Q_CREATE(ElaWindow)
     Q_PROPERTY_CREATE_Q_H(bool, IsStayTop)
+    Q_PROPERTY_CREATE_Q_H(QString, MainWindowName)
     Q_PROPERTY_CREATE_Q_H(bool, IsFixedSize)
     Q_PROPERTY_CREATE_Q_H(bool, IsDefaultClosed)
     Q_PROPERTY_CREATE_Q_H(int, AppBarHeight)
@@ -70,7 +71,7 @@ public:
     ElaAppBarType::ButtonFlags getWindowButtonFlags() const;
 
     void closeWindow();
-Q_SIGNALS:
+    Q_SLOT   void onCurrentWidgetChange(int);
     Q_SIGNAL void userInfoCardClicked();
     Q_SIGNAL void closeButtonClicked();
     Q_SIGNAL void navigationNodeClicked(ElaNavigationType::NavigationNodeType nodeType, QString nodeKey);
