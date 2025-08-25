@@ -107,6 +107,8 @@ void MainWindow::initWindow()
     setWindowIcon(QIcon(MainWindowDefine::kMainWindowIconPath));
 	// 设置窗口标题
     setMainWindowName(MainWindowDefine::kMainWindowTitle);
+    //拦截默认关闭事件
+    setIsDefaultClosed(false);
 }
 
 /***************************************************************************
